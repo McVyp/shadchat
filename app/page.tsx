@@ -1,3 +1,4 @@
+import ChatInput from "@/components/chatInput";
 import Header from "@/components/ui/header";
 import { Input } from "@/components/ui/input";
 import InitUser from "@/lib/store/InitUser";
@@ -33,9 +34,7 @@ export default async function Page() {
               ))}
             </div>
           </div>
-          <div className="p-6">
-            <Input placeholder="Send Message..." />
-          </div>
+          <ChatInput />
         </div>
       </div>
       <InitUser user={data.session?.user} />
