@@ -1,11 +1,17 @@
 "use client";
 import React from "react";
 import { Input } from "./ui/input";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 
 export default function ChatInput() {
-  const handleSendMessage = (text: string) => {
-    alert(text);
+  const supabase = createClient();
+  const handleSendMessage = async (text: string) => {
     //call to supabase
+    const { error } = await supabase.from("messages").insert({ text });
+    if (error) {
+      toast.error(error.message);
+    }
   };
   return (
     <div className="p-6">
