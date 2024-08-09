@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import { Button } from "./button";
+import { Button } from "./ui/button";
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 
-export default function Header({ user }: { user: User | undefined }) {
+export default function Header({ user }: { user: User | null| undefined }) {
   const router = useRouter();
   const handleLogin = async () => {
     const supabase = createClient();
@@ -21,7 +21,6 @@ export default function Header({ user }: { user: User | undefined }) {
     await supabase.auth.signOut();
     router.refresh();
   };
-  console.log(user);
   return (
     <div className="h-20">
       <div className="p-4 border-b flex items-center justify-between h-full">
