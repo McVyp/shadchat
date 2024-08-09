@@ -24,7 +24,7 @@ export default function Header({ user }: { user: User | undefined }) {
   console.log(user);
   return (
     <div className="h-20">
-      <div className="p-4 border-b flex items-center justify-between">
+      <div className="p-4 border-b flex items-center justify-between h-full">
         <div>
           <h2 className="text-xl font-semibold">Daily Chat</h2>
           <div className="flex items-center gap-1">
