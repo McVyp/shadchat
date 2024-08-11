@@ -38,14 +38,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "messages_sent_by_fkey"
-            columns: ["send_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
+          }
         ]
       }
       users: {

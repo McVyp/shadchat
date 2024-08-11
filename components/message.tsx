@@ -22,7 +22,7 @@ export default function Message({ message }: { message: IMessage }) {
           </h1>
         </div>
         <p className="text-gray-300">
-          I’m thinking about grabbing a coffee. Want to join me?
+          {message.text}
         </p>
       </div>
     </div>
