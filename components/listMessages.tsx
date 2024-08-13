@@ -103,7 +103,6 @@ export default function ListMessages() {
   };
   return (
     <>
-      <div>{notification}</div>
       <div
         ref={scrollRef}
         onScroll={handleOnScroll}
