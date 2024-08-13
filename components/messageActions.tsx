@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useMessage } from "@/lib/store/messages";
+import { IMessage, useMessage } from "@/lib/store/messages";
 import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -72,10 +72,18 @@ export function EditAlert() {
   const actionMessage = useMessage((state) => state.actionMessage);
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
+  const optimisticEditMessage = useMessage(
+    (state) => state.optimisticEditMessage
+  );
   const handleEditMessage = async () => {
     const supabase = createClient();
     const text = inputRef.current.value.trim();
     if (text) {
+      optimisticEditMessage({
+        ...actionMessage,
+        text: text,
+        is_edit: true,
+      } as IMessage);
       const { error } = await supabase
         .from("messages")
         .update({ text, is_edit: true })
@@ -85,8 +93,8 @@ export function EditAlert() {
       } else {
         toast.success("Message edited successfully!");
       }
+      document.getElementById("trigger-edit")?.click();
     }
-
   };
   return (
     <Dialog>
