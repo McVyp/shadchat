@@ -1,13 +1,14 @@
 "use client";
 import { IMessage, useMessage } from "@/lib/store/messages";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Message from "./message";
 import { DeleteAlert, EditAlert } from "./messageActions";
 import { createClient } from "@/lib/supabase/client";
 import { toast, useSonner } from "sonner";
 
 export default function ListMessages() {
+  const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
   const { messages, addMessage, optimisticIds } = useMessage((state) => state);
   const supabase = createClient();
   useEffect(() => {
@@ -41,8 +42,19 @@ export default function ListMessages() {
       channel.unsubscribe();
     };
   }, [messages]);
+
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+
+    if (scrollContainer) {
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
+    }
+  }, [messages]);
   return (
-    <div className="flex-1 flex flex-col p-5 h-full overflow-y-auto scroll-m-4">
+    <div
+      ref={scrollRef}
+      className="flex-1 flex flex-col p-5 h-full overflow-y-auto scroll-m-4"
+    >
       <div className="flex-1"></div>
       <div className="space-y-7">
         {messages.map((message) => {
