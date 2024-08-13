@@ -9,7 +9,13 @@ import { toast, useSonner } from "sonner";
 
 export default function ListMessages() {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
-  const { messages, addMessage, optimisticIds } = useMessage((state) => state);
+  const {
+    messages,
+    addMessage,
+    optimisticIds,
+    optimisticDeleteMessage,
+    optimisticEditMessage,
+  } = useMessage((state) => state);
   const supabase = createClient();
   useEffect(() => {
     const channel = supabase
@@ -35,6 +41,20 @@ export default function ListMessages() {
               addMessage(newMessage as IMessage);
             }
           }
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "messages" },
+        (payload) => {
+          optimisticDeleteMessage(payload.old.id);
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "messages" },
+        (payload) => {
+          optimisticEditMessage(payload.new as IMessage);
         }
       )
       .subscribe();
