@@ -13,7 +13,7 @@ import { Ellipsis } from "lucide-react";
 import { useUser } from "@/lib/store/user";
 
 export default function Message({ message }: { message: IMessage }) {
-  const user = useUser((state)=> state.user)
+  const user = useUser((state) => state.user);
   return (
     <div className="flex gap-2">
       <div>
@@ -51,7 +51,13 @@ const MessageMenu = () => {
         <DropdownMenuLabel>Action</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Delete</DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => {
+            document.getElementById("trigger-delete")?.click();
+          }}
+        >
+          Delete
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
