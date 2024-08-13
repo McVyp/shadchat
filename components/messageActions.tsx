@@ -16,8 +16,12 @@ import { toast } from "sonner";
 
 export function DeleteAlert() {
   const actionMessage = useMessage((state) => state.actionMessage);
+  const optimisticDeleteMessage = useMessage(
+    (state) => state.optimisticDeleteMessage
+  );
   const handleDeleteMessage = async () => {
     const supabase = createClient();
+    optimisticDeleteMessage(actionMessage?.id!);
     const { data, error } = await supabase
       .from("messages")
       .delete()
