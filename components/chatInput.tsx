@@ -10,6 +10,7 @@ import { IMessage, useMessage } from "@/lib/store/messages";
 export default function ChatInput() {
   const user = useUser((state) => state.user);
   const addMessage = useMessage((state) => state.addMessage);
+  const setOptimisticIds = useMessage((state) => state.setOptimisticIds);
   const supabase = createClient();
   const handleSendMessage = async (text: string) => {
     if (text.trim()) {
@@ -29,16 +30,16 @@ export default function ChatInput() {
       };
 
       addMessage(newMessage as IMessage);
+      setOptimisticIds(newMessage.id);
 
       const { error } = await supabase.from("messages").insert({ text });
       if (error) {
         toast.error(error.message);
       }
-  } else{
-    toast.error("Message cannot be empty!!!");
-    
-  }
-}
+    } else {
+      toast.error("Message cannot be empty!!!");
+    }
+  };
   return (
     <div className="p-6">
       <Input

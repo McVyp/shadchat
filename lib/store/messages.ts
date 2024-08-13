@@ -23,13 +23,15 @@ interface MessageState{
     setActionMessage: (message:IMessage|undefined)=> void;
     optimisticDeleteMessage:(messageId: string)=> void;
     optimisticEditMessage:(message: IMessage)=> void;
+    setOptimisticIds: (id: string)=> void;
 }
 
 export const useMessage = create<MessageState>((set)=>({
     messages:[],
     actionMessage: undefined,
     optimisticIds:[],
-    addMessage:(newMessages) =>set((state)=>({messages:[...state.messages, newMessages] , optimisticIds:[...state.optimisticIds, newMessages.id]})),
+    setOptimisticIds: (id:string) => set((state)=>({optimisticIds:[...state.optimisticIds, id]})),
+    addMessage:(newMessages) =>set((state)=>({messages:[...state.messages, newMessages]})),
     setActionMessage:(message)=>set(()=>({actionMessage:message})),
     optimisticDeleteMessage: (messageId)=> set((state)=>{
         return {
