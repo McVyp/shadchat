@@ -1,3 +1,4 @@
+"use client";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,9 +11,23 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useMessage } from "@/lib/store/messages";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 
 export function DeleteAlert() {
   const actionMessage = useMessage((state) => state.actionMessage);
+  const handleDeleteMessage = async () => {
+    const supabase = createClient();
+    const { data, error } = await supabase
+      .from("messages")
+      .delete()
+      .eq("id", actionMessage?.id!);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Message deleted successfully");
+    }
+  };
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -28,7 +43,9 @@ export function DeleteAlert() {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={handleDeleteMessage}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
