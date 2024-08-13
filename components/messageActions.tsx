@@ -94,6 +94,9 @@ export function EditAlert() {
         toast.success("Message edited successfully!");
       }
       document.getElementById("trigger-edit")?.click();
+    } else {
+      document.getElementById("trigger-edit")?.click();
+      document.getElementById("trigger-delete")?.click();
     }
   };
   return (
