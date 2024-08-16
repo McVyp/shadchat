@@ -17,10 +17,40 @@ export type IMessage = {
 
 interface MessageState{
     messages: IMessage[];
+    actionMessage: IMessage | undefined
     addMessage: (message: IMessage) => void;
+    optimisticIds: string[],
+    setActionMessage: (message:IMessage|undefined)=> void;
+    optimisticDeleteMessage:(messageId: string)=> void;
+    optimisticEditMessage:(message: IMessage)=> void;
+    setOptimisticIds: (id: string)=> void;
 }
 
 export const useMessage = create<MessageState>((set)=>({
     messages:[],
-    addMessage:(message) =>set((state)=>({messages:[...state.messages, message]}))
+    actionMessage: undefined,
+    optimisticIds:[],
+    setOptimisticIds: (id:string) => set((state)=>({optimisticIds:[...state.optimisticIds, id]})),
+    addMessage:(newMessages) =>set((state)=>({messages:[...state.messages, newMessages]})),
+    setActionMessage:(message)=>set(()=>({actionMessage:message})),
+    optimisticDeleteMessage: (messageId)=> set((state)=>{
+        return {
+            messages: state.messages.filter(
+                (message)=> message.id !== messageId
+            )
+        }
+    }),
+    optimisticEditMessage: (updateMessage)=> set((state)=>{
+        return {
+            messages: state.messages.filter(
+                (message)=> {
+                    if(message.id === updateMessage.id){
+                        (message.text = updateMessage.text),
+                        (message.is_edit = updateMessage.is_edit);
+                    }
+                    return message;
+                }
+            )
+        }
+    })
 }))
