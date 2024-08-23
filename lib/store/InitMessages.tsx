@@ -3,12 +3,15 @@ import { User } from "@supabase/supabase-js";
 import React, { useEffect, useRef } from "react";
 
 import { IMessage, useMessage } from "./messages";
+import { LIMIT_MESSAGES } from "../const";
 
-export default function InitMessages({ messages }: { messages: IMessage[]}) {
+export default function InitMessages({ messages }: { messages: IMessage[] }) {
   const initState = useRef(false);
+
+  const hasMore = messages.length >= LIMIT_MESSAGES;
   useEffect(() => {
     if (!initState.current) {
-      useMessage.setState({ messages });
+      useMessage.setState({ messages, hasMore });
     }
     initState.current = true;
   });

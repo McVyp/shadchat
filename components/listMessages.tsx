@@ -107,7 +107,7 @@ export default function ListMessages() {
       <div
         ref={scrollRef}
         onScroll={handleOnScroll}
-        className="flex-1 flex flex-col p-5 h-full overflow-y-auto scroll-m-4"
+        className="flex-1 flex flex-col p-5 h-full overflow-y-auto gap-5"
       >
         <div className="flex-1">
           <LoadMoreMessages />

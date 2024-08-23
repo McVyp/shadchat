@@ -9,6 +9,7 @@ import { toast } from "sonner";
 export default function LoadMoreMessages() {
   const page = useMessage((state) => state.page);
   const setMessages = useMessage((state) => state.setMessages);
+  const hasMore = useMessage((state) => state.hasMore);
   const fetchMore = async () => {
     const { from, to } = getFromAndTo(page, LIMIT_MESSAGES);
     const supabase = createClient();
@@ -23,9 +24,12 @@ export default function LoadMoreMessages() {
       setMessages(data.reverse());
     }
   };
-  return (
-    <Button variant="outline" className="w-full" onClick={fetchMore}>
-      Load More...
-    </Button>
-  );
+  if (hasMore) {
+    return (
+      <Button variant="outline" className="w-full" onClick={fetchMore}>
+        Load More...
+      </Button>
+    );
+  }
+  return <></>;
 }
