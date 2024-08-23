@@ -5,8 +5,9 @@ import React, { useEffect, useRef, useState } from "react";
 import Message from "./message";
 import { DeleteAlert, EditAlert } from "./messageActions";
 import { createClient } from "@/lib/supabase/client";
-import { toast, useSonner } from "sonner";
+import { toast } from "sonner";
 import { ArrowDown } from "lucide-react";
+import LoadMoreMessages from "./loadMoreMessages";
 
 export default function ListMessages() {
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>;
@@ -22,7 +23,7 @@ export default function ListMessages() {
   const supabase = createClient();
   useEffect(() => {
     const channel = supabase
-      .channel("chat-rom")
+      .channel("chat-room")
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "messages" },
@@ -106,15 +107,16 @@ export default function ListMessages() {
       <div
         ref={scrollRef}
         onScroll={handleOnScroll}
-        className="flex-1 flex flex-col p-5 h-full overflow-y-auto scroll-m-4"
+        className="flex-1 flex flex-col p-5 h-full overflow-y-auto gap-5"
       >
-        <div className="flex-1"></div>
+        <div className="flex-1">
+          <LoadMoreMessages />
+        </div>
         <div className="space-y-7">
           {messages.map((message) => {
             return <Message key={message.id} message={message} />;
           })}
         </div>
-
         <DeleteAlert />
         <EditAlert />
       </div>

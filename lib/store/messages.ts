@@ -1,5 +1,6 @@
 import { User } from "@supabase/supabase-js";
 import { create } from "zustand";
+import { LIMIT_MESSAGES } from "../const";
 
 export type IMessage = {
     created_at: string;
@@ -16,6 +17,8 @@ export type IMessage = {
 }
 
 interface MessageState{
+    hasMore: boolean,
+    page: number;
     messages: IMessage[];
     actionMessage: IMessage | undefined
     addMessage: (message: IMessage) => void;
@@ -24,11 +27,20 @@ interface MessageState{
     optimisticDeleteMessage:(messageId: string)=> void;
     optimisticEditMessage:(message: IMessage)=> void;
     setOptimisticIds: (id: string)=> void;
+    setMessages:(messages: IMessage[]) => void;
 }
 
 export const useMessage = create<MessageState>((set)=>({
+    hasMore: true,
+    page: 1,
     messages:[],
     actionMessage: undefined,
+    setMessages:(messages) =>
+            set((state)=>({
+                messages:[...messages, ...state.messages], 
+                page: state.page + 1,
+                hasMore: messages.length >= LIMIT_MESSAGES
+            })),
     optimisticIds:[],
     setOptimisticIds: (id:string) => set((state)=>({optimisticIds:[...state.optimisticIds, id]})),
     addMessage:(newMessages) =>set((state)=>({messages:[...state.messages, newMessages]})),
