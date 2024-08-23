@@ -16,6 +16,7 @@ export type IMessage = {
 }
 
 interface MessageState{
+    page: number;
     messages: IMessage[];
     actionMessage: IMessage | undefined
     addMessage: (message: IMessage) => void;
@@ -27,6 +28,7 @@ interface MessageState{
 }
 
 export const useMessage = create<MessageState>((set)=>({
+    page: 1,
     messages:[],
     actionMessage: undefined,
     optimisticIds:[],
