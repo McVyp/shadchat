@@ -8,8 +8,9 @@ import { useMessage } from "@/lib/store/messages";
 import { toast } from "sonner";
 export default function LoadMoreMessages() {
   const page = useMessage((state) => state.page);
+  const setMessages = useMessage((state) => state.setMessages);
   const fetchMore = async () => {
-    const { from, to } = getFromAndTo(1, LIMIT_MESSAGES);
+    const { from, to } = getFromAndTo(page, LIMIT_MESSAGES);
     const supabase = createClient();
     const { data, error } = await supabase
       .from("messages")
@@ -19,7 +20,7 @@ export default function LoadMoreMessages() {
     if (error) {
       toast.error(error.message);
     } else {
-      console.log(data);
+      setMessages(data.reverse());
     }
   };
   return (
