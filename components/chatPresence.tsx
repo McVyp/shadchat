@@ -18,7 +18,7 @@ export default function ChatPresence() {
           //@ts-ignore
           userIds.push(channel.presenceState()[id][0].user_id);
         }
-        setOnlineUser(userIds.length);
+        setOnlineUser([...new Set(userIds)].length);
       })
       .subscribe(async (status) => {
         if (status === "SUBSCRIBED") {
